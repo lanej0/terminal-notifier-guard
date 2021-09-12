@@ -1,9 +1,8 @@
 module TerminalNotifier
   module Guard
-    VERSION = "1.7.5"
+    VERSION = "1.7.6"
     ICONS_PATH = File.expand_path("../../icons", __FILE__)
     GUARD_ICON = File.join(ICONS_PATH, 'Guard.icns')
-		OSX_BUILT_IN_SOUNDS = { :notify => 'Blow', :failed => 'Sosumi', :pending => 'Morse', :success => 'Hero' }.freeze
 
     def self.osx_version
       Gem::Version.new(`sw_vers -productVersion`.strip)
@@ -50,8 +49,7 @@ module TerminalNotifier
 
     def self.execute(verbose, options)
       if available? && installed?
-				type = options.delete(:type)
-        options.merge!({ :contentImage=> icon(options.delete(:type)), :sound => sound(:type) })
+        options.merge!({ :contentImage=> icon(options.delete(:type)), :appIcon => GUARD_ICON })
 
         command = [bin_path, *options.map { |k,v| ["-#{k}", v.to_s] }.flatten]
         if RUBY_VERSION < '1.9'
@@ -118,12 +116,6 @@ module TerminalNotifier
       File.join(ICONS_PATH, file_name)
     end
     module_function :icon
-
-		def sound(type = :notify)
-      type ||= :notify
-      OSX_BUILT_IN_SOUNDS[type.to_sym]
-    end
-    module_function :sound
 
     # Removes a notification that was previously sent with the specified
     # ‘group’ ID, if one exists.
