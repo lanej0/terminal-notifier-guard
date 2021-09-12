@@ -1,6 +1,6 @@
 module TerminalNotifier
   module Guard
-    VERSION = "1.7.4"
+    VERSION = "1.7.5"
     ICONS_PATH = File.expand_path("../../icons", __FILE__)
     GUARD_ICON = File.join(ICONS_PATH, 'Guard.icns')
 		OSX_BUILT_IN_SOUNDS = { :notify => 'Blow', :failed => 'Sosumi', :pending => 'Morse', :success => 'Hero' }.freeze
@@ -51,7 +51,7 @@ module TerminalNotifier
     def self.execute(verbose, options)
       if available? && installed?
 				type = options.delete(:type)
-        options.merge!({ :contentImage=> icon(options.delete(:type)), :appIcon => GUARD_ICON, :sound => sound(type) })
+        options.merge!({ :contentImage=> icon(options.delete(:type)), :sound => sound(:type) })
 
         command = [bin_path, *options.map { |k,v| ["-#{k}", v.to_s] }.flatten]
         if RUBY_VERSION < '1.9'
